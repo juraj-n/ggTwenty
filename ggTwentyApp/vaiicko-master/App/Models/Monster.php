@@ -36,12 +36,8 @@ class Monster extends Model
     }
     public function getImageUrl(): string
     {
-        if ($this->image_url === '' || $this->image_url === null)
-            return Configuration::UPLOAD_DIR . 'monsters/default_monst.png';
-
         return $this->image_url;
     }
-
     public function setId(?int $id): void
     {
         $this->id = $id;
@@ -60,11 +56,6 @@ class Monster extends Model
     public function setHp(int $hp): void
     {
         $this->hp = $hp;
-    }
-
-    public function setAc(int $ac): void
-    {
-        $this->ac = $ac;
     }
 
     public function setCurrentHp(int $current_hp): void

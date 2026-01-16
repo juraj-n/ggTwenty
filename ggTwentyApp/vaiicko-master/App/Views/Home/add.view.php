@@ -6,7 +6,7 @@
     $view->setLayout('root');
 ?>
 
-<script src="<?= $link->asset('js/changeCharImage.js') ?>" defer></script> <!-- defer loads script after html -->
+<script src="<?= $link->asset('js/changeAddedImage.js') ?>" defer></script> <!-- defer loads script after html -->
 
 <div class="char-card">
     <h2 class="char-form-heading text-center">

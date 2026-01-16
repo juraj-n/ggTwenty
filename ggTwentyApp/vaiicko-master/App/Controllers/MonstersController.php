@@ -37,17 +37,14 @@ class MonstersController extends BaseController
         $currentHp = $hp;
         $userId = (int)$this->app->getAuth()->user->getId();
 
-        if ($request->hasValue('monster-img'))
+        $imgFile = $request->file('monster-img');
+        $targetPath = Configuration::UPLOAD_DIR . '_default_monst.png';
+        if ($imgFile)
         {
-            $imgFile = $request->file('monster-img');
             $uniqueName = time() . '-' . $imgFile->getName();
-            $targetPath = Configuration::UPLOAD_DIR . '/monsters/' . $uniqueName;
+            $targetPath = Configuration::UPLOAD_DIR . $uniqueName;
             if (!$imgFile->store($targetPath))
-                throw new HttpException(500, 'Failed to upload image.');
-        }
-        else
-        {
-            $targetPath = '';
+                $targetPath = Configuration::UPLOAD_DIR . '_default_monst.png';
         }
 
         $monster = new Monster();
@@ -80,7 +77,7 @@ class MonstersController extends BaseController
             if (is_null($monster)) {
                 throw new HttpException(404);
             }
-            if ($monster->getImageUrl() !== Configuration::UPLOAD_DIR . 'monsters/default_monst.png')
+            if ($monster->getImageUrl() !== Configuration::UPLOAD_DIR . '_default_monst.png')
                 @unlink($monster->getImageUrl());
 
             $monster->delete();

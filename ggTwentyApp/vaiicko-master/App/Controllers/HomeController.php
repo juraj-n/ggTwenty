@@ -15,7 +15,6 @@ class HomeController extends BaseController
     {
         return $this->app->getAuth()->isLogged();
     }
-
     public function index(Request $request) : Response
     {
         $characters = Character::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
@@ -39,17 +38,14 @@ class HomeController extends BaseController
         $ac = (int)$request->value('character-ac');
         $userId = (int)$this->app->getAuth()->user->getId();
 
-        if ($request->hasValue('character-img'))
+        $imgFile = $request->file('character-img');
+        $targetPath = Configuration::UPLOAD_DIR . '_default_char.png';
+        if ($imgFile)
         {
-            $imgFile = $request->file('character-img');
             $uniqueName = time() . '-' . $imgFile->getName();
-            $targetPath = Configuration::UPLOAD_DIR . '/characters/' . $uniqueName;
+            $targetPath = Configuration::UPLOAD_DIR . $uniqueName;
             if (!$imgFile->store($targetPath))
-                throw new HttpException(500, 'Failed to upload image.');
-        }
-        else
-        {
-            $targetPath = '';
+                $targetPath = Configuration::UPLOAD_DIR . '_default_char.png';
         }
 
         $character = new Character();
@@ -91,13 +87,13 @@ class HomeController extends BaseController
         if ($imgFile && $imgFile->isOk())
         {
             $oldFileUrl = $char->getImageUrl();
-            if ($oldFileUrl !== Configuration::UPLOAD_DIR . 'characters/default_char.png')
+            if ($oldFileUrl !== Configuration::UPLOAD_DIR . '_default_char.png')
             {
                 if (file_exists($oldFileUrl) && is_file($oldFileUrl))
                     @unlink($oldFileUrl);
             }
             $newFileName = time() . '-' . $imgFile->getName();
-            $targetPath = Configuration::UPLOAD_DIR . '/characters/' . $newFileName;
+            $targetPath = Configuration::UPLOAD_DIR . $newFileName;
             if ($imgFile->store($targetPath))
                 $char->setImageUrl($targetPath);
 
@@ -134,7 +130,7 @@ class HomeController extends BaseController
             if (is_null($char)) {
                 throw new HttpException(404);
             }
-            if ($char->getImageUrl() !== Configuration::UPLOAD_DIR . 'characters/default_char.png')
+            if ($char->getImageUrl() !== Configuration::UPLOAD_DIR . '_default_char.png')
                 @unlink($char->getImageUrl());
 
             $char->delete();
