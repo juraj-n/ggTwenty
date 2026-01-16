@@ -52,7 +52,7 @@
                     </a
                 </li>
                 <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="<?= $link->url('encounters.index') ?>">
                         ENCOUNTERS
                     </a>
                 </li>
@@ -93,7 +93,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="<?= $link->url('encounters.index') ?>">
                     ENCOUNTERS
                 </a>
             </li>
