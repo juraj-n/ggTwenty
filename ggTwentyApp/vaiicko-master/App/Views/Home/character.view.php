@@ -37,7 +37,8 @@ $view->setLayout('root');
             <div class="col-sm-6">
                 <!-- Name -->
                 <label for="character-name" class="d-block text-white text-center mb-2">Character Name</label>
-                <input name="character-name" type="text" id="character-name" class="form-control custom-input mb-3" placeholder="<?= $char->getName() ?>" required>
+                <input name="character-name" type="text" id="character-name" class="form-control custom-input mb-3"
+                       value="<?= htmlspecialchars($char->getName()) ?>" placeholder="Enter Character Name" required>
 
                 <hr class="section-separator mb-3">
 
