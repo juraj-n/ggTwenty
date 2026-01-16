@@ -1,0 +1,35 @@
+.monster-card {
+    background-color: #00161d;
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px;
+    height: 100%;                       /* 100% predka */
+    overflow: hidden;                   /* Odreze pretekajuci kontent */
+    max-width: 380px;
+    margin: 0 auto;                     /* Centruje horizontalne */
+}
+.monster-info {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ccc;
+}
+.monster-name-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.delete-monst-btn {
+    background-color: #780606;
+    color: white;
+    margin-top: 3px;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+.delete-monst-btn:hover,
+.delete-monst-btn:active {
+    background-color: #600707;
+    color: white;
+}

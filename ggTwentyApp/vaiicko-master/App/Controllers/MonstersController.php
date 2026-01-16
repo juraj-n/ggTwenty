@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Configuration;
+use App\Models\Character;
+use App\Models\Monster;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
@@ -13,10 +15,81 @@ class MonstersController extends BaseController
     {
         return $this->app->getAuth()->isLogged();
     }
-
     public function index(Request $request) : Response
     {
-        return $this->html();
+        $monsters = Monster::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
+
+        return $this->html(compact('monsters'));
+    }
+    public function add(Request $request) : Response
+    {
+        // Nebol odoslaný formulár
+        if (!$request->hasValue('submit')) {
+            return $this->html();
+        }
+
+        $name = trim($request->value('monster-name'));
+        if (empty($name)) {
+            $message = 'Character name is required!';
+            return $this->html(compact('message'));
+        }
+        $hp = (int)$request->value('monster-hp');
+        $currentHp = $hp;
+        $userId = (int)$this->app->getAuth()->user->getId();
+
+        if ($request->hasValue('monster-img'))
+        {
+            $imgFile = $request->file('monster-img');
+            $uniqueName = time() . '-' . $imgFile->getName();
+            $targetPath = Configuration::UPLOAD_DIR . '/monsters/' . $uniqueName;
+            if (!$imgFile->store($targetPath))
+                throw new HttpException(500, 'Failed to upload image.');
+        }
+        else
+        {
+            $targetPath = '';
+        }
+
+        $monster = new Monster();
+        $monster->setName($name);
+        $monster->setHp($hp);
+        $monster->setCurrentHp($currentHp);
+        $monster->setUserId($userId);
+        $monster->setImageUrl($targetPath);
+
+        try {
+            $monster->save();
+            return $this->redirect($this->url('monsters.index'));
+        } catch (\Exception $e) {
+            $message = 'Error saving character: ' . $e->getMessage();
+            return $this->html(compact('message'));
+        }
+    }
+    public function delete(Request $request): Response
+    {
+        try {
+            $id = (int)$request->value('id');
+            $monster = Monster::getOne($id);
+
+            // Kontrola, či postava patrí prihlásenému userovi
+            $currentUserId = $this->app->getAuth()->user->getId();
+            if ($monster->getUserId() !== $currentUserId) {
+                throw new HttpException(403, 'Unauthorized access to character.');
+            }
+
+            if (is_null($monster)) {
+                throw new HttpException(404);
+            }
+            if ($monster->getImageUrl() !== Configuration::UPLOAD_DIR . 'monsters/default_monst.png')
+                @unlink($monster->getImageUrl());
+
+            $monster->delete();
+
+        } catch (\Exception $e) {
+            throw new HttpException(500, 'DB Error: ' . $e->getMessage());
+        }
+
+        return $this->redirect($this->url('monsters.index'));
     }
     public function logout(Request $request): Response
     {

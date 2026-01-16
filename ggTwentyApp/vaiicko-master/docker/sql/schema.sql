@@ -13,7 +13,19 @@ CREATE TABLE characters (
     current_hp SMALLINT UNSIGNED NOT NULL,
     image_url VARCHAR(255) NULL,
 
-    -- Define Foreign Key relationship
+    FOREIGN KEY (user_id) REFERENCES users(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE monsters (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    hp SMALLINT UNSIGNED NOT NULL,
+    current_hp SMALLINT UNSIGNED NOT NULL,
+    image_url VARCHAR(255) NULL,
+
     FOREIGN KEY (user_id) REFERENCES users(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE
