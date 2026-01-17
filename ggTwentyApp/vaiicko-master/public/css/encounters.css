@@ -1,0 +1,52 @@
+/* Outside */
+.enc-options {
+    background-color: #00161d;
+    border-radius: 1.5rem;
+    max-width: 400px;
+    width: 100%;
+}
+/* Join */
+.form-wrapper {
+    max-width: 300px;  /* ensures input + join align with create button */
+    width: 100%;
+}
+.join-enc-inp,
+.join-enc-btn {
+    flex: 1;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+}
+.join-enc-inp {
+    border-radius: 5px;
+    border: none;
+    margin-right: 2px;
+}
+.join-enc-btn {
+    border-radius: 5px;
+    border: none;
+    background-color: #007274;
+    color: #ffffff;
+    cursor: pointer;
+}
+/* Create */
+.create-enc-btn {
+    display: inline-block;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    padding: 0.5rem 0;
+    font-size: 1.1rem;
+    background-color: #007274;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    margin-top: 5px;
+    cursor: pointer;
+}
+/* Hover */
+.join-enc-btn:hover,
+.create-enc-btn:hover,
+.join-enc-btn:active,
+.create-enc-btn:active {
+    background-color: #005455;
+}
