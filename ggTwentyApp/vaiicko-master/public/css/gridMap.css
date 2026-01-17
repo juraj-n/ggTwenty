@@ -1,0 +1,74 @@
+.enc-view {
+    margin-top: -50px; /* as you wanted */
+}
+
+.map-grid-wrapper {
+    max-width: 600px;
+    width: 100%;
+}
+
+.map-grid {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-image: url('../images/map_grid.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+}
+
+.info-panel-wrapper {
+    width: 100%;
+    max-width: 400px;
+    background-color: #00161d;
+    color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+/* Top Bar */
+.top-bar {
+    border-bottom: white 1px solid;
+}
+.top-code {
+    padding: 6px 0 0 6px;
+}
+.top-btn {
+    padding: 6px 12px;
+    margin-bottom: 2px;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    width: 70px;
+    height: 32px;
+    line-height: 1.2;
+    box-shadow: none;
+}
+.add-btn {
+    background-color: #007274;
+    color: #fff;
+}
+.add-btn:hover,
+.add-btn:active {
+    background-color: #005455;
+    color: #fff;
+}
+.del-btn {
+    background-color: red;
+    color: #fff;
+}
+
+.del-btn:hover,
+.del-btn:active {
+    background-color: darkred;
+    color: #fff;
+}
+/* Tokens */
+/* End Round */
+.end-round-btn {
+
+}

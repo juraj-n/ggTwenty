@@ -7,6 +7,7 @@ class Token extends Model
     public ?int $id = null;
     protected ?int $enc_id = null;
     protected string $name = '';
+    protected string $image_url = '';
     protected int $x = 0;
     protected int $y = 0;
     protected int $initiative = 0;
@@ -22,6 +23,10 @@ class Token extends Model
     public function getName(): string
     {
         return $this->name;
+    }
+    public function getImageUrl(): string
+    {
+        return $this->image_url;
     }
     public function getX(): int
     {
@@ -46,6 +51,10 @@ class Token extends Model
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+    public function setImageUrl(string $image_url): void
+    {
+        $this->image_url = $image_url;
     }
     public function setX(int $x): void
     {

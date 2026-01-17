@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="<?= $link->asset('css/editChar.css') ?>">
     <link rel="stylesheet" href="<?= $link->asset('css/monsters.css') ?>">
     <link rel="stylesheet" href="<?= $link->asset('css/encounters.css') ?>">
+    <link rel="stylesheet" href="<?= $link->asset('css/gridMap.css') ?>">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
