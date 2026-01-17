@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Encounter;
 use App\Models\Token;
 use Framework\Core\BaseController;
+use Framework\Http\HttpException;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
@@ -32,6 +33,24 @@ class EncountersController extends BaseController
         $tokens = Token::getAll('enc_id = ?', [$encounter->getId()]);
 
         return $this->html(compact('encounter', 'tokens'));
+    }
+    public function deleteToken(Request $request) : Response
+    {
+        try {
+            $id = (int)$request->value('id');
+            $token = Token::getOne($id);
+
+            if (is_null($token)) {
+                throw new HttpException(404);
+            }
+
+            $token->delete();
+
+        } catch (\Exception $e) {
+            throw new HttpException(500, 'DB Error: ' . $e->getMessage());
+        }
+
+        return $this->redirect($this->url('encounter'));
     }
     public function spectate(Request $request) : Response
     {
