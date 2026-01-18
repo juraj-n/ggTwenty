@@ -28,17 +28,32 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update Position
         selectedToken.style.left = `${6.7 + x * (100 / 8.5)}%`;
         selectedToken.style.top  = `${6.7 + y * (100 / 8.5)}%`;
+
+        const tokenId = selectedToken.dataset.tokenId;
+
         // Unselect token
         selectedToken.style.border = 'none';
         selectedToken = null;
 
         // TODO: AJAX
-        // Optional: AJAX call to save new x,y in DB
-        // Example:
-        // fetch('/encounters/moveToken', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ id: selectedToken.dataset.tokenId, x, y })
-        // });
+        fetch(window.changeTokenPositionUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+                token_id: tokenId,
+                x: x,
+                y: y
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error('Move failed:', data.error);
+                }
+            })
+            .catch(err => console.error('AJAX error:', err));
     });
 });

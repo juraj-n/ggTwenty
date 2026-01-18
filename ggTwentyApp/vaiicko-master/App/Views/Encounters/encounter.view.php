@@ -8,6 +8,7 @@ use App\Models\Encounter;
 
 
 ?>
+<script>window.changeTokenPositionUrl = "<?= $link->url('encounters.changeTokenPosition') ?>";</script> <!-- For AJAX position handling -->
 <script src="<?= $link->asset('js/moveTokenOnGrid.js') ?>" defer></script>
 
 <div class="enc-view container-fluid">
@@ -21,6 +22,7 @@ use App\Models\Encounter;
                         <img
                                 src="<?= $token->getImageUrl() ?>" alt="<?= $token->getName() ?>"
                                 class="token-on-grid"
+                                data-token-id="<?= $token->getId() ?>"
                                 style="
                                         top: <?= 6.7 + $token->getY() * (100 / 8.5) ?>%;
                                         left: <?= 6.7 + $token->getX() * (100 / 8.5) ?>%;
@@ -120,7 +122,7 @@ use App\Models\Encounter;
                                 <button type="submit" class="top-btn add-btn">
                                     Add
                                 </button>
-                            </div class="input-group input-group-sm">
+                            </div>
                         </form>
                     <?php endforeach; ?>
 

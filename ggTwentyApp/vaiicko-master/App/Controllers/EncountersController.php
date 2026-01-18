@@ -39,6 +39,39 @@ class EncountersController extends BaseController
 
         return $this->html(compact('encounter', 'tokens', 'dmchars', 'dmmonsters'));
     }
+    public function changeTokenPosition(Request $request) : Response
+    {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (!isset($data['token_id'], $data['x'], $data['y'])) {
+            return $this->json([
+                'success' => false,
+                'error' => 'Invalid data'
+            ], 400);
+        }
+
+        $token = Token::getOne((int)$data['token_id']);
+        if (is_null($token)) {
+            return $this->json([
+                'success' => false,
+                'error' => 'Token not found'
+            ], 404);
+        }
+
+        $token->setX((int)$data['x']);
+        $token->setY((int)$data['y']);
+
+        try {
+            $token->save();
+        } catch (\Exception $e) {
+            return $this->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+        return $this->json(['success' => true]);
+    }
     public function addMonster(Request $request) : Response
     {
         $monster = Monster::getOne($request->value('id'));
