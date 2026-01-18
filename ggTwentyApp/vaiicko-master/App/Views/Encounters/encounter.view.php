@@ -51,6 +51,19 @@ use App\Models\Encounter;
                         </button>
                     </form>
                 </div>
+                <!-- Token On Round -->
+                <?php if (count($tokens) > 0): ?>
+                <div class="d-flex justify-content-center">
+                    <div class="on-round-card d-inline-flex flex-column align-items-center">
+                        <img src="<?= $tokens[$encounter->getCurrent()]->getImageUrl() ?>"
+                             alt="<?= $tokens[$encounter->getCurrent()]->getName() ?>"
+                             class="on-round-img">
+                        <div class="on-round-name">
+                            (#<?= $tokens[$encounter->getCurrent()]->getId() ?>) <?= $tokens[$encounter->getCurrent()]->getName() ?>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
                 <!-- Token Info -->
                 <div class="tokens flex-grow-1 overflow-auto">
                     <?php foreach($tokens as $token): ?>
@@ -59,7 +72,7 @@ use App\Models\Encounter;
                             <img src="<?= $token->getImageUrl() ?>" alt="<?= $token->getName() ?>" class="token-img">
                             <!-- Name -->
                             <span class="token-name flex-grow-1 ms-2">
-                                <?= $token->getName() ?>
+                                (#<?= $token->getId() ?>) <?= $token->getName() ?>
                             </span>
                             <!-- Delete Token -->
                             <form method="post" action="<?= $link->url('encounters.deleteToken') ?>">
@@ -72,9 +85,12 @@ use App\Models\Encounter;
                     <?php endforeach; ?>
                 </div>
                 <!-- End Round -->
-                <a href="#" class="end-round-btn">
-                    End Round
-                </a>
+                <form method="post" action="<?= $link->url('encounters.endRound') ?>" class="d-flex justify-content-center w-100 mt-auto">
+                    <input type="hidden" name="id" value="<?= $encounter->getId() ?>">
+                    <button type="submit" class="end-round-btn ms-2">
+                        End Round
+                    </button>
+                </form>
             </div>
         </div>
 

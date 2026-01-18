@@ -68,13 +68,36 @@
     background-color: red;
     color: #fff;
 }
-
 .del-btn:hover,
 .del-btn:active {
     background-color: darkred;
     color: #fff;
 }
 /* Info Panel Tokens */
+.on-round-card {
+    border: 1px solid #ffd700;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    margin-top: -10px;
+}
+.on-round-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;  /* 'Scaling' img */
+    border-radius: 3px;
+    margin-bottom: 4px;
+}
+.on-round-name {
+    color: #ffd700;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+    max-width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* '...' */
+}
+
 .tokens {
     flex-grow: 1;
     overflow-y: auto;
@@ -124,12 +147,17 @@
 }
 /* End Round */
 .end-round-btn {
-    margin: auto 50px auto 50px;
-    display: block;
+    display: inline-block;
     text-align: center;
     text-decoration: none;
+    border: none;
     font-weight: 777;
     background-color: #007274;
     color: #fff;
     padding: 10px;
+}
+.end-round-btn:hover,
+.end-round-btn:active {
+    background-color: #005455;
+    color: #fff;
 }

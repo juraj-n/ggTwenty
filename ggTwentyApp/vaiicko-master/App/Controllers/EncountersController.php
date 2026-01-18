@@ -30,7 +30,7 @@ class EncountersController extends BaseController
         {
             $encounter = $encounters[0];
         }
-        $tokens = Token::getAll('enc_id = ?', [$encounter->getId()]);
+        $tokens = Token::getAll('enc_id = ?', [$encounter->getId()], 'initiative DESC');
 
         return $this->html(compact('encounter', 'tokens'));
     }
@@ -75,6 +75,25 @@ class EncountersController extends BaseController
             $token->delete();
 
         } catch (\Exception $e) {
+            throw new HttpException(500, 'DB Error: ' . $e->getMessage());
+        }
+
+        return $this->redirect($this->url('encounter'));
+    }
+    public function endRound(Request $request) : Response
+    {
+        // Determine next
+        $encounterId = (int)$request->value('id');
+        $tokes = Token::getAll('enc_id = ?', [$encounterId]);
+        $encounter = Encounter::getOne($encounterId);
+        $nextCurrent = ($encounter->getCurrent() + 1) % count($tokes);
+        // Save as current
+        try
+        {
+            $encounter->setCurrent($nextCurrent);
+            $encounter->save();
+        } catch (\Exception $e)
+        {
             throw new HttpException(500, 'DB Error: ' . $e->getMessage());
         }
 
