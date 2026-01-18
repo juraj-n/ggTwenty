@@ -73,6 +73,14 @@
     background-color: darkred;
     color: #fff;
 }
+.add-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+.add-initiative {
+    width: 160px;
+}
 /* Info Panel Tokens */
 .on-round-card {
     border: 1px solid #ffd700;

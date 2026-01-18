@@ -3,6 +3,8 @@ use App\Models\Encounter;
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var Encounter $encounter */
 /** @var array $tokens */
+/** @var array $dmchars */
+/** @var array $dmmonsters */
 
 
 ?>
@@ -38,9 +40,9 @@ use App\Models\Encounter;
                         CODE: <?= $encounter->getCode() ?>
                     </div>
                     <!-- Add button -->
-                    <a href="#" class="top-btn add-btn ms-2">
+                    <button type="button" class="top-btn add-btn ms-2" data-bs-toggle="modal" data-bs-target="#addOptionsModal">
                         Add
-                    </a>
+                    </button>
                     <!-- Delete button -->
                     <form method="post" action="<?= $link->url('encounters.deleteEncounter') ?>">
                         <input type="hidden" name="id" value="<?= $encounter->getId() ?>">
@@ -89,6 +91,65 @@ use App\Models\Encounter;
                         End Round
                     </button>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- When ADD Button is called -->
+<div class="modal" id="addOptionsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark shadow-lg">
+            <div class="modal-body p-0">
+                <div class="list-group list-group-flush">
+                    <?php foreach($dmmonsters as $monster): ?>
+                        <form method="post" action="<?= $link->url('encounters.addMonster') ?>"
+                              class="list-group-item bg-dark border-secondary d-flex align-items-center">
+                            <input type="hidden" name="encounter_id" value="<?= $encounter->getId() ?>">
+                            <input type="hidden" name="id" value="<?= $monster->getId() ?>">
+
+                            <img src="<?= $monster->getImageUrl() ?>" alt="<?= $monster->getName() ?>" class="add-img me-2">
+                            <div class="flex-grow-1 text-white">
+                                <?= $monster->getName() ?>
+                            </div>
+                            <div class="input-group input-group-sm add-initiative">
+                                <span class="input-group-text bg-secondary text-white border-secondary">Init:</span>
+                                <input type="number" name="initiative"
+                                       class="form-control bg-dark text-white border-secondary text-center"
+                                       placeholder="0" required min="0" max="50">
+                                <button type="submit" class="top-btn add-btn">
+                                    Add
+                                </button>
+                            </div class="input-group input-group-sm">
+                        </form>
+                    <?php endforeach; ?>
+
+                    <?php foreach($dmchars as $char): ?>
+                        <form method="post" action="<?= $link->url('encounters.addCharacter') ?>"
+                              class="list-group-item bg-dark border-secondary d-flex align-items-center">
+                            <input type="hidden" name="encounter_id" value="<?= $encounter->getId() ?>">
+                            <input type="hidden" name="id" value="<?= $char->getId() ?>">
+
+                            <img src="<?= $char->getImageUrl() ?>" alt="<?= $char->getName() ?>"
+                                 class="add-img me-2">
+
+                            <div class="flex-grow-1 text-white">
+                                <?= $char->getName() ?>
+                            </div>
+
+                            <div class="input-group input-group-sm add-initiative">
+                                <span class="input-group-text bg-secondary text-white border-secondary">Init:</span>
+                                <input type="number" name="initiative"
+                                       class="form-control bg-dark text-white border-secondary text-center"
+                                       placeholder="0" required>
+                                <button type="submit" class="top-btn add-btn">
+                                    Add
+                                </button>
+                            </div>
+                        </form>
+                    <?php endforeach; ?>
+
+                </div>
             </div>
         </div>
     </div>

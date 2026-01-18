@@ -2,7 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Models\Character;
 use App\Models\Encounter;
+use App\Models\Monster;
 use App\Models\Token;
 use Framework\Core\BaseController;
 use Framework\Http\HttpException;
@@ -32,7 +34,56 @@ class EncountersController extends BaseController
         }
         $tokens = Token::getAll('enc_id = ?', [$encounter->getId()], 'initiative DESC');
 
-        return $this->html(compact('encounter', 'tokens'));
+        $dmchars = Character::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
+        $dmmonsters = Monster::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
+
+        return $this->html(compact('encounter', 'tokens', 'dmchars', 'dmmonsters'));
+    }
+    public function addMonster(Request $request) : Response
+    {
+        $monster = Monster::getOne($request->value('id'));
+        if (!empty($monster) && $monster->getUserId() == $this->app->getAuth()->user->getId())
+        {
+            $token = new Token();
+            $token->setEncId((int)$request->value('encounter_id'));
+            $token->setName($monster->getName());
+            $token->setImageUrl($monster->getImageUrl());
+            $token->setX(0);
+            $token->setY(0);
+            $token->setInitiative((int)$request->value('initiative'));
+            try
+            {
+                $token->save();
+            } catch (\Exception $e)
+            {
+                throw new HttpException(500, 'DB Error: ' . $e->getMessage());
+            }
+        }
+
+        return $this->redirect($this->url('encounter'));
+    }
+    public function addCharacter(Request $request) : Response
+    {
+        $character = Character::getOne($request->value('id'));
+        if (!empty($character) && $character->getUserId() == $this->app->getAuth()->user->getId())
+        {
+            $token = new Token();
+            $token->setEncId((int)$request->value('encounter_id'));
+            $token->setName($character->getName());
+            $token->setImageUrl($character->getImageUrl());
+            $token->setX(0);
+            $token->setY(0);
+            $token->setInitiative((int)$request->value('initiative'));
+            try
+            {
+                $token->save();
+            } catch (\Exception $e)
+            {
+                throw new HttpException(500, 'DB Error: ' . $e->getMessage());
+            }
+        }
+
+        return $this->redirect($this->url('encounter'));
     }
     public function deleteEncounter(Request $request) : Response
     {
