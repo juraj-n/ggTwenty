@@ -44,9 +44,12 @@ use App\Models\Encounter;
                         Add
                     </a>
                     <!-- Delete button -->
-                    <a href="#" class="top-btn del-btn ms-2">
-                        Delete
-                    </a>
+                    <form method="post" action="<?= $link->url('encounters.deleteEncounter') ?>">
+                        <input type="hidden" name="id" value="<?= $encounter->getId() ?>">
+                        <button type="submit" class="top-btn del-btn ms-2">
+                            Delete
+                        </button>
+                    </form>
                 </div>
                 <!-- Token Info -->
                 <div class="tokens flex-grow-1 overflow-auto">

@@ -34,6 +34,34 @@ class EncountersController extends BaseController
 
         return $this->html(compact('encounter', 'tokens'));
     }
+    public function deleteEncounter(Request $request) : Response
+    {
+        $encounterId = (int)$request->value('id');
+        // Delete Tokens
+        $tokens = Token::getAll('enc_id = ?', [$encounterId]);
+        try
+        {
+            foreach ($tokens as $token)
+            {
+                $token->delete();
+            }
+        } catch (\Exception $e)
+        {
+            throw new HttpException(500, 'DB Error: ' . $e->getMessage());
+        }
+        // Delete Encounter
+        try {
+            $encounter = Encounter::getOne($encounterId);
+            if (is_null($encounter)) {
+                throw new HttpException(404);
+            }
+            $encounter->delete();
+        } catch (\Exception $e) {
+            throw new HttpException(500, 'DB Error: ' . $e->getMessage());
+        }
+
+        return $this->redirect($this->url('index'));
+    }
     public function deleteToken(Request $request) : Response
     {
         try {
