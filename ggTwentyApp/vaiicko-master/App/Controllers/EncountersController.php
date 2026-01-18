@@ -15,7 +15,9 @@ class EncountersController extends BaseController
 {
     public function index(Request $request) : Response
     {
-        return $this->html();
+        $characters = Character::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
+
+        return $this->html(compact('characters'));
     }
     public function encounter(Request $request) : Response
     {
@@ -186,10 +188,45 @@ class EncountersController extends BaseController
 
         return $this->redirect($this->url('encounter'));
     }
+    public function join(Request $request) : Response
+    {
+        $code = $request->value('code');
+        $encounter = Encounter::getAll('code = ?', [$code]);
+        if (empty($encounter))
+            return $this->redirect($this->url('index'));
+
+        $characters = Character::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
+
+        return $this->html(compact('code', 'characters'));
+    }
     public function spectate(Request $request) : Response
     {
-        // TODO: Join Encounter
-        return $this->html();
+        $code = $request->value('code');
+        $encounter = Encounter::getAll('code = ?', [$code]);
+        if (empty($encounter))
+            return $this->redirect($this->url('home.index'));
+
+        $character = Character::getOne($request->value('id'));
+        if (!empty($character) && $character->getUserId() == $this->app->getAuth()->user->getId())
+        {
+            $token = new Token();
+            $token->setEncId((int)$request->value('encounter_id'));
+            $token->setName($character->getName());
+            $token->setImageUrl($character->getImageUrl());
+            $token->setX(0);
+            $token->setY(0);
+            $token->setInitiative((int)$request->value('initiative'));
+            try
+            {
+                $token->save();
+            } catch (\Exception $e)
+            {
+                throw new HttpException(500, 'DB Error: ' . $e->getMessage());
+            }
+        }
+        $tokens = Token::getAll('enc_id = ?', [$encounter[0]->getId()], 'initiative DESC');
+
+        return $this->html(compact('encounter', 'tokens'));
     }
     private function generateCode() : string
     {
