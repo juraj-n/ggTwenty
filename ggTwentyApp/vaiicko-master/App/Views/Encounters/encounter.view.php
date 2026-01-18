@@ -10,7 +10,6 @@ use App\Models\Encounter;
 
 <div class="enc-view container-fluid">
     <div class="row justify-content-center align-items-stretch g-3">
-
         <!-- Grid Map -->
         <div class="col-12 col-md-8 col-lg-6 d-flex justify-content-center">
             <div class="map-grid-wrapper h-100">
@@ -29,7 +28,6 @@ use App\Models\Encounter;
                 </div>
             </div>
         </div>
-
         <!-- Info Panel -->
         <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
             <div class="info-panel-wrapper h-100">
@@ -93,6 +91,5 @@ use App\Models\Encounter;
                 </form>
             </div>
         </div>
-
     </div>
 </div>

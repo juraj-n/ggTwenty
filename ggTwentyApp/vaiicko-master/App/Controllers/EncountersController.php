@@ -85,6 +85,9 @@ class EncountersController extends BaseController
         // Determine next
         $encounterId = (int)$request->value('id');
         $tokes = Token::getAll('enc_id = ?', [$encounterId]);
+        if (count($tokes) == 0)
+            return $this->redirect($this->url('encounter'));
+
         $encounter = Encounter::getOne($encounterId);
         $nextCurrent = ($encounter->getCurrent() + 1) % count($tokes);
         // Save as current
