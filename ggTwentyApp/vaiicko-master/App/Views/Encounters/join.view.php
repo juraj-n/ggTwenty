@@ -1,6 +1,6 @@
 <?php
 /** @var \Framework\Support\LinkGenerator $link */
-/** @var string $code */
+/** @var array $encounter */
 /** @var array $characters */
 ?>
 
@@ -9,8 +9,8 @@
         <form method="post" action="<?= $link->url('encounters.spectate') ?>"
               class="character-card d-flex flex-column flex-md-row align-items-center mb-1 w-100">
 
-            <input type="hidden" name="code" value="<?= htmlspecialchars($code) ?>">
-            <input type="hidden" name="character_id" value="<?= $char->getId() ?>">
+            <input type="hidden" name="enc_id" value="<?= $encounter[0]->getId() ?>">
+            <input type="hidden" name="char_id" value="<?= $char->getId() ?>">
 
             <!-- Character Image -->
             <img src="<?= $char->getImageUrl() ?>"

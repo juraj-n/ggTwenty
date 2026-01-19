@@ -102,20 +102,9 @@ class EncountersController extends BaseController
         $character = Character::getOne($request->value('id'));
         if (!empty($character) && $character->getUserId() == $this->app->getAuth()->user->getId())
         {
-            $token = new Token();
-            $token->setEncId((int)$request->value('encounter_id'));
-            $token->setName($character->getName());
-            $token->setImageUrl($character->getImageUrl());
-            $token->setX(0);
-            $token->setY(0);
-            $token->setInitiative((int)$request->value('initiative'));
-            try
-            {
-                $token->save();
-            } catch (\Exception $e)
-            {
-                throw new HttpException(500, 'DB Error: ' . $e->getMessage());
-            }
+            $this->makeTokenFromChar($character,
+                (int)$request->value('encounter_id'),
+                (int)$request->value('initiative'));
         }
 
         return $this->redirect($this->url('encounter'));
@@ -197,34 +186,20 @@ class EncountersController extends BaseController
 
         $characters = Character::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
 
-        return $this->html(compact('code', 'characters'));
+        return $this->html(compact('encounter', 'characters'));
     }
     public function spectate(Request $request) : Response
     {
-        $code = $request->value('code');
-        $encounter = Encounter::getAll('code = ?', [$code]);
-        if (empty($encounter))
-            return $this->redirect($this->url('home.index'));
+        $encounter = Encounter::getOne($request->value('enc_id'));
+        $character = Character::getOne($request->value('char_id'));
 
-        $character = Character::getOne($request->value('id'));
         if (!empty($character) && $character->getUserId() == $this->app->getAuth()->user->getId())
         {
-            $token = new Token();
-            $token->setEncId((int)$request->value('encounter_id'));
-            $token->setName($character->getName());
-            $token->setImageUrl($character->getImageUrl());
-            $token->setX(0);
-            $token->setY(0);
-            $token->setInitiative((int)$request->value('initiative'));
-            try
-            {
-                $token->save();
-            } catch (\Exception $e)
-            {
-                throw new HttpException(500, 'DB Error: ' . $e->getMessage());
-            }
+            $this->makeTokenFromChar($character,
+                $encounter->getId(),
+                (int)$request->value('initiative'));
         }
-        $tokens = Token::getAll('enc_id = ?', [$encounter[0]->getId()], 'initiative DESC');
+        $tokens = Token::getAll('enc_id = ?', [$encounter->getId()], 'initiative DESC');
 
         return $this->html(compact('encounter', 'tokens'));
     }
@@ -241,5 +216,23 @@ class EncountersController extends BaseController
         } while (!empty(Encounter::getAll('code = ?', [$code])));
 
         return $code;
+    }
+    private function makeTokenFromChar(Character $character, int $encounterId, int $initiative)
+    {
+        $token = new Token();
+        $token->setEncId($encounterId);
+        $token->setName($character->getName());
+        $token->setImageUrl($character->getImageUrl());
+        $token->setX(0);
+        $token->setY(0);
+        $token->setInitiative($initiative);
+
+        try
+        {
+            $token->save();
+        } catch (\Exception $e)
+        {
+            return;
+        }
     }
 }
