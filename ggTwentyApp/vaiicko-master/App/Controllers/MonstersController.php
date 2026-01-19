@@ -3,11 +3,11 @@
 namespace App\Controllers;
 
 use App\Configuration;
-use App\Models\Character;
 use App\Models\Monster;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
+use HttpException;
 
 class MonstersController extends BaseController
 {
@@ -58,44 +58,37 @@ class MonstersController extends BaseController
         $monster->setUserId($userId);
         $monster->setImageUrl($targetPath);
 
-        try {
+        try
+        {
             $monster->save();
             return $this->redirect($this->url('monsters.index'));
         } catch (\Exception $e) {
-            $message = 'Error saving character: ' . $e->getMessage();
-            return $this->html(compact('message'));
+            return $this->html();
         }
     }
     public function delete(Request $request): Response
     {
-        try {
+        try
+        {
             $id = (int)$request->value('id');
             $monster = Monster::getOne($id);
 
-            // Kontrola, či postava patrí prihlásenému userovi
+            // User's monster check
             $currentUserId = $this->app->getAuth()->user->getId();
-            if ($monster->getUserId() !== $currentUserId) {
-                throw new HttpException(403, 'Unauthorized access to character.');
-            }
-
-            if (is_null($monster)) {
+            if ($monster->getUserId() !== $currentUserId)
+                throw new HttpException(403, 'Unauthorized access to monster!');
+            if (is_null($monster))
                 throw new HttpException(404);
-            }
+
             if ($monster->getImageUrl() !== Configuration::UPLOAD_DIR . '_default_monst.png')
                 @unlink($monster->getImageUrl());
 
             $monster->delete();
-
-        } catch (\Exception $e) {
+        } catch (\Exception $e)
+        {
             throw new HttpException(500, 'DB Error: ' . $e->getMessage());
         }
 
         return $this->redirect($this->url('monsters.index'));
     }
-    public function logout(Request $request): Response
-    {
-        $this->app->getAuth()->logout();
-        return $this->redirect(Configuration::LOGIN_URL);
-    }
-
 }

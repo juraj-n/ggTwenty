@@ -20,9 +20,7 @@ class EncountersController extends BaseController
     }
     public function index(Request $request) : Response
     {
-        $characters = Character::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
-
-        return $this->html(compact('characters'));
+        return $this->html();
     }
     public function encounter(Request $request) : Response
     {
@@ -50,7 +48,8 @@ class EncountersController extends BaseController
     {
         $data = json_decode(file_get_contents('php://input'), true);
 
-        if (!isset($data['token_id'], $data['x'], $data['y'])) {
+        if (!isset($data['token_id'], $data['x'], $data['y']))
+        {
             return $this->json([
                 'success' => false,
                 'error' => 'Invalid data'
@@ -58,7 +57,8 @@ class EncountersController extends BaseController
         }
 
         $token = Token::getOne((int)$data['token_id']);
-        if (is_null($token)) {
+        if (is_null($token))
+        {
             return $this->json([
                 'success' => false,
                 'error' => 'Token not found'
@@ -68,7 +68,8 @@ class EncountersController extends BaseController
         $token->setX((int)$data['x']);
         $token->setY((int)$data['y']);
 
-        try {
+        try
+        {
             $token->save();
         } catch (\Exception $e) {
             return $this->json([
@@ -161,7 +162,7 @@ class EncountersController extends BaseController
         try
         {
             $token->delete();
-
+            // Change current in Encounter (access violation)
             $encounter = Encounter::getOne((int)$request->value('encounter_id'));
             $tokens = Token::getAll('enc_id = ?', [(int)$request->value('encounter_id')]);
             if (count($tokens) == 0)
@@ -219,15 +220,10 @@ class EncountersController extends BaseController
         $encounterId = (int)$request->value('enc_id');
         $encounter = Encounter::getOne($encounterId);
 
-        if (!$encounter) {
+        if (!$encounter)
             return $this->json(['error' => 'Encounter not found'], 404);
-        }
 
-        $tokens = Token::getAll(
-            'enc_id = ?',
-            [$encounter->getId()],
-            'initiative DESC'
-        );
+        $tokens = Token::getAll('enc_id = ?', [$encounter->getId()], 'initiative DESC');
 
         return $this->json([
             'current' => $encounter->getCurrent(),

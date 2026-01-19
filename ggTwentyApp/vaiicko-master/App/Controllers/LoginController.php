@@ -3,11 +3,9 @@
 namespace App\Controllers;
 
 use App\Configuration;
-use Exception;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
-use Framework\Http\Responses\ViewResponse;
 
 class LoginController extends BaseController
 {
@@ -32,7 +30,6 @@ class LoginController extends BaseController
                 $message = 'Bad username or password!';
                 return $this->html(compact('message', 'username'));
         }
-
 
         return $this->html();
     }

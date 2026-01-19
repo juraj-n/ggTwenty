@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Optionally hide the message after a few seconds
         setTimeout(() => {
             messageBox.classList.add('d-none');
-        }, 5000);
+        }, 500);
     }
 
     // AJAX to send data
@@ -22,18 +22,20 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             body: formData
         })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(data => Promise.reject(data));
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                // Server successfully updated the data
-                showFeedback('Changes saved successfully!', 'success');
+                if (data.status === 'success') {
+                    showFeedback(data.message, 'success');
+                    if (data.new_image_url) {
+                        document.getElementById('image-preview').src = data.new_image_url;
+                    }
+                } else if (data.status === 'error') {
+                    showFeedback(data.message, 'danger');
+                } else {
+                    showFeedback('Unexpected server response.', 'warning');
+                }
             })
             .catch(error => {
-                // Handle errors from the network or server-side validation
                 console.error('Save failed:', error);
                 showFeedback('Error saving data.', 'danger');
             });

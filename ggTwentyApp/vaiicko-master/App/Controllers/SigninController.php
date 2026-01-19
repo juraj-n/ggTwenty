@@ -2,22 +2,11 @@
 
 namespace App\Controllers;
 
-use App\Configuration;
 use App\Models\User;
 use Exception;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
-use Framework\Http\Responses\ViewResponse;
-
-/**
- * Class AuthController
- *
- * This controller handles authentication actions such as login, logout, and redirection to the login page. It manages
- * user sessions and interactions with the authentication system.
- *
- * @package App\Controllers
- */
 class SigninController extends BaseController
 {
     public function authorize(Request $request, string $action): bool
@@ -31,29 +20,29 @@ class SigninController extends BaseController
 
     public function signin(Request $request): Response
     {
-        // Nebol odoslaný formulár
-        if (!$request->hasValue('submit')) {
+        if (!$request->hasValue('submit'))
             return $this->html();
-        }
 
         $username = trim($request->value('username'));
         $password = $request->value('password');
         $confirmPassword = $request->value('confirm-password');
 
-        // Kontrola povinných polí
-        if (empty($username) || empty($password)) {
+        // Required fields
+        if (empty($username) || empty($password))
+        {
             $message = 'All fields are required!';
             return $this->html(compact('message'));
         }
-
-        // Kontrola, či už existuje username
+        // Existing Username
         $existingUsers = User::getAll("username = ?", [$username]);
-        if (!empty($existingUsers)) {
+        if (!empty($existingUsers))
+        {
             $message = 'Username already exists!';
             return $this->html(compact('message'));
         }
-        // Kontrola zhody hesiel
-        if ($password !== $confirmPassword) {
+        // Passwords Match
+        if ($password !== $confirmPassword)
+        {
             $message = "Passwords do not match!";
             return $this->html(compact('message'));
         }
@@ -62,9 +51,11 @@ class SigninController extends BaseController
         $newUser->setUsername($username);
         $newUser->setPassword($password);
 
-        try {
+        try
+        {
             $newUser->save();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $message = 'Error creating user: ' . $e->getMessage();
             return $this->html(compact("message"));
         }

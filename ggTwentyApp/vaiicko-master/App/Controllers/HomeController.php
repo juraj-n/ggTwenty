@@ -24,21 +24,15 @@ class HomeController extends BaseController
     public function add(Request $request) : Response
     {
         if (!$request->hasValue('submit'))
-        {
             return $this->html();
-        }
 
+        // Name
         $name = trim($request->value('character-name'));
         if ($name === '')
-        {
-            $message = 'Character name is required!';
-            return $this->html(compact('message'));
-        }
+            return $this->html();
         if (mb_strlen($name) > 29)
-        {
-            $message = 'Character name is too long! (Max 29 characters)';
-            return $this->html(compact('message'));
-        }
+            return $this->html();
+
         $hp = (int)$request->value('character-hp');
         $currentHp = $hp;
         $ac = (int)$request->value('character-ac');
@@ -46,6 +40,7 @@ class HomeController extends BaseController
 
         $imgFile = $request->file('character-img');
         $targetPath = Configuration::UPLOAD_DIR . '_default_char.png';
+        // File Uploaded
         if ($imgFile)
         {
             $uniqueName = time() . '-' . $imgFile->getName();
@@ -62,12 +57,13 @@ class HomeController extends BaseController
         $character->setUserId($userId);
         $character->setImageUrl($targetPath);
 
-        try {
+        try
+        {
             $character->save();
             return $this->redirect($this->url('home.index'));
-        } catch (\Exception $e) {
-            $message = 'Error saving character: ' . $e->getMessage();
-            return $this->html(compact('message'));
+        } catch (\Exception $e)
+        {
+            return $this->html();
         }
     }
     public function edit(Request $request): Response
@@ -75,16 +71,25 @@ class HomeController extends BaseController
         $id = (int)$request->value('character-id');
         $char = Character::getOne($id);
 
-        // Kontrola, či postava patrí prihlásenému userovi
+        // User's character check
         $currentUserId = $this->app->getAuth()->user->getId();
-        if ($char->getUserId() !== $currentUserId) {
+        if ($char->getUserId() !== $currentUserId)
+        {
             return $this->json([
                 'status' => 'error',
                 'message' => 'Unauthorized access to character.'
             ]);
         }
+        $newName = trim($request->value('character-name'));
+        if ($newName === '' || mb_strlen($newName) > 29)
+        {
+            return $this->json([
+                'status' => 'error',
+                'message' => 'Invalid character name.'
+            ]);
+        }
 
-        $char->setName($request->value('character-name'));
+        $char->setName($newName);
         $char->setHp((int)$request->value('character-hp'));
         $char->setCurrentHp((int)$request->value('character-cur-hp'));
         $char->setAc((int)$request->value('character-ac'));
@@ -105,7 +110,8 @@ class HomeController extends BaseController
 
         }
 
-        try {
+        try
+        {
             $char->save();
 
             return $this->json([
@@ -113,7 +119,8 @@ class HomeController extends BaseController
                 'message' => 'Character updated successfully.',
                 'new_image_url' => $char->getImageUrl()
             ]);
-        } catch (\Exception $e) {
+        } catch (\Exception $e)
+        {
             return $this->json([
                 'status' => 'error',
                 'message' => 'Error saving character.',
@@ -123,25 +130,24 @@ class HomeController extends BaseController
     }
     public function delete(Request $request): Response
     {
-        try {
+        try
+        {
             $id = (int)$request->value('id');
             $char = Character::getOne($id);
 
-            // Kontrola, či postava patrí prihlásenému userovi
+            // User's character check
             $currentUserId = $this->app->getAuth()->user->getId();
-            if ($char->getUserId() !== $currentUserId) {
+            if ($char->getUserId() !== $currentUserId)
                 throw new HttpException(403, 'Unauthorized access to character.');
-            }
-
-            if (is_null($char)) {
+            if (is_null($char))
                 throw new HttpException(404);
-            }
+
             if ($char->getImageUrl() !== Configuration::UPLOAD_DIR . '_default_char.png')
                 @unlink($char->getImageUrl());
 
             $char->delete();
-
-        } catch (\Exception $e) {
+        } catch (\Exception $e)
+        {
             throw new HttpException(500, 'DB Error: ' . $e->getMessage());
         }
 
@@ -159,5 +165,4 @@ class HomeController extends BaseController
         $this->app->getAuth()->logout();
         return $this->redirect(Configuration::LOGIN_URL);
     }
-
 }

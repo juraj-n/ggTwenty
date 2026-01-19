@@ -54,8 +54,4 @@
             </button>
         </div>
     </form>
-
-    <!-- Message Box for feedback (instead of alert()) -->
-    <div id="message-box" class="mt-3 alert d-none" role="alert"></div>
-
 </div>
