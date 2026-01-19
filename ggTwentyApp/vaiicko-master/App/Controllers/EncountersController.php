@@ -6,6 +6,7 @@ use App\Models\Character;
 use App\Models\Encounter;
 use App\Models\Monster;
 use App\Models\Token;
+use App\Models\User;
 use Framework\Core\BaseController;
 use Framework\Http\HttpException;
 use Framework\Http\Request;
@@ -13,6 +14,10 @@ use Framework\Http\Responses\Response;
 
 class EncountersController extends BaseController
 {
+    public function authorize(Request $request, string $action): bool
+    {
+        return $this->app->getAuth()->isLogged();
+    }
     public function index(Request $request) : Response
     {
         $characters = Character::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
@@ -102,9 +107,18 @@ class EncountersController extends BaseController
         $character = Character::getOne($request->value('id'));
         if (!empty($character) && $character->getUserId() == $this->app->getAuth()->user->getId())
         {
-            $this->makeTokenFromChar($character,
-                (int)$request->value('encounter_id'),
-                (int)$request->value('initiative'));
+            $token = new Token();
+            $token->setEncId($request->value('encounter_id'));
+            $token->setName($character->getName());
+            $token->setImageUrl($character->getImageUrl());
+            $token->setX(0);
+            $token->setY(0);
+            $token->setInitiative($request->value('initiative'));
+
+            try
+            {
+                $token->save();
+            } catch (\Exception $e){}
         }
 
         return $this->redirect($this->url('encounter'));
@@ -177,31 +191,46 @@ class EncountersController extends BaseController
 
         return $this->redirect($this->url('encounter'));
     }
-    public function join(Request $request) : Response
-    {
-        $code = $request->value('code');
-        $encounter = Encounter::getAll('code = ?', [$code]);
-        if (empty($encounter))
-            return $this->redirect($this->url('index'));
-
-        $characters = Character::getAll('user_id = ?', [$this->app->getAuth()->user->getId()]);
-
-        return $this->html(compact('encounter', 'characters'));
-    }
     public function spectate(Request $request) : Response
     {
-        $encounter = Encounter::getOne($request->value('enc_id'));
-        $character = Character::getOne($request->value('char_id'));
+        $encounters = Encounter::getAll('code = ?', [$request->value('code')]);
+        if (!$encounters)
+            return $this->redirect($this->url('index'));
 
-        if (!empty($character) && $character->getUserId() == $this->app->getAuth()->user->getId())
-        {
-            $this->makeTokenFromChar($character,
-                $encounter->getId(),
-                (int)$request->value('initiative'));
+        $tokens = Token::getAll('enc_id = ?', [$encounters[0]->getId()], 'initiative DESC');
+        $dmName = User::getOne($encounters[0]->getDmId())->getUsername();
+
+        return $this->html([
+            'encounter' => $encounters[0],
+            'tokens' => $tokens,
+            'dmName' => $dmName
+        ]);
+    }
+    public function spectateData(Request $request): Response
+    {
+        $encounterId = (int)$request->value('enc_id');
+        $encounter = Encounter::getOne($encounterId);
+
+        if (!$encounter) {
+            return $this->json(['error' => 'Encounter not found'], 404);
         }
-        $tokens = Token::getAll('enc_id = ?', [$encounter->getId()], 'initiative DESC');
 
-        return $this->html(compact('encounter', 'tokens'));
+        $tokens = Token::getAll(
+            'enc_id = ?',
+            [$encounter->getId()],
+            'initiative DESC'
+        );
+
+        return $this->json([
+            'current' => $encounter->getCurrent(),
+            'tokens' => array_map(fn($t) => [
+                'id' => $t->getId(),
+                'name' => $t->getName(),
+                'img' => $t->getImageUrl(),
+                'x' => $t->getX(),
+                'y' => $t->getY()
+            ], $tokens)
+        ]);
     }
     private function generateCode() : string
     {
@@ -216,23 +245,5 @@ class EncountersController extends BaseController
         } while (!empty(Encounter::getAll('code = ?', [$code])));
 
         return $code;
-    }
-    private function makeTokenFromChar(Character $character, int $encounterId, int $initiative)
-    {
-        $token = new Token();
-        $token->setEncId($encounterId);
-        $token->setName($character->getName());
-        $token->setImageUrl($character->getImageUrl());
-        $token->setX(0);
-        $token->setY(0);
-        $token->setInitiative($initiative);
-
-        try
-        {
-            $token->save();
-        } catch (\Exception $e)
-        {
-            return;
-        }
     }
 }

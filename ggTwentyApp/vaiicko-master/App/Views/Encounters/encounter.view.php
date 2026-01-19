@@ -6,7 +6,6 @@ use App\Models\Encounter;
 /** @var array $dmchars */
 /** @var array $dmmonsters */
 
-
 ?>
 <script>window.changeTokenPositionUrl = "<?= $link->url('encounters.changeTokenPosition') ?>";</script> <!-- For AJAX position handling -->
 <script src="<?= $link->asset('js/moveTokenOnGrid.js') ?>" defer></script>
