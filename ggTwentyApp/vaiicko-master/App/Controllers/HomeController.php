@@ -23,14 +23,20 @@ class HomeController extends BaseController
     }
     public function add(Request $request) : Response
     {
-        // Nebol odoslaný formulár
-        if (!$request->hasValue('submit')) {
+        if (!$request->hasValue('submit'))
+        {
             return $this->html();
         }
 
         $name = trim($request->value('character-name'));
-        if (empty($name)) {
+        if ($name === '')
+        {
             $message = 'Character name is required!';
+            return $this->html(compact('message'));
+        }
+        if (mb_strlen($name) > 29)
+        {
+            $message = 'Character name is too long! (Max 29 characters)';
             return $this->html(compact('message'));
         }
         $hp = (int)$request->value('character-hp');

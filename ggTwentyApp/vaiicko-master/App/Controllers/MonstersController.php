@@ -23,14 +23,18 @@ class MonstersController extends BaseController
     }
     public function add(Request $request) : Response
     {
-        // Nebol odoslaný formulár
-        if (!$request->hasValue('submit')) {
+        if (!$request->hasValue('submit'))
             return $this->html();
-        }
 
         $name = trim($request->value('monster-name'));
-        if (empty($name)) {
-            $message = 'Character name is required!';
+        if ($name === '')
+        {
+            $message = 'Monster name is required!';
+            return $this->html(compact('message'));
+        }
+        if (mb_strlen($name) > 20)
+        {
+            $message = 'Monster name is too long! (Max 20 characters)';
             return $this->html(compact('message'));
         }
         $hp = (int)$request->value('monster-hp');
