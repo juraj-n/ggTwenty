@@ -111,6 +111,13 @@
     margin-bottom: 5px;
     margin-top: -10px;
 }
+.enc-on-round-empty {
+    border: 1px dotted white;
+    border-radius: 5px;
+    height: 100px;
+    width: 100px;
+    margin: -10px auto 5px auto;
+}
 .enc-on-round-img {
     width: 80px;
     height: 80px;
@@ -123,7 +130,8 @@
     padding: 0 5px;
 }
 .enc-info-token {
-    border-bottom: white 1px solid;
+    min-height: 350px;
+    max-height: 350px;
     margin-bottom: 5px;
 }
 .enc-info-token-card {

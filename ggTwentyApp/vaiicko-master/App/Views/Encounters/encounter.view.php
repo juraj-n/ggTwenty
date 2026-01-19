@@ -54,16 +54,18 @@ use App\Models\Encounter;
                 </div>
                 <!-- Token On Round -->
                 <?php if (count($tokens) > 0): ?>
-                <div class="d-flex justify-content-center">
-                    <div class="enc-on-round-token d-inline-flex flex-column align-items-center">
-                        <img src="<?= $tokens[$encounter->getCurrent()]->getImageUrl() ?>"
-                             alt="<?= $tokens[$encounter->getCurrent()]->getName() ?>"
-                             class="enc-on-round-img">
-                        <div class="enc-on-round-name">
-                            (#<?= $tokens[$encounter->getCurrent()]->getId() ?>) <?= $tokens[$encounter->getCurrent()]->getName() ?>
+                    <div class="d-flex justify-content-center">
+                        <div class="enc-on-round-token d-inline-flex flex-column align-items-center">
+                            <img src="<?= $tokens[$encounter->getCurrent()]->getImageUrl() ?>"
+                                 alt="<?= $tokens[$encounter->getCurrent()]->getName() ?>"
+                                 class="enc-on-round-img">
+                            <div class="enc-on-round-name">
+                                (#<?= $tokens[$encounter->getCurrent()]->getId() ?>) <?= $tokens[$encounter->getCurrent()]->getName() ?>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php else: ?>
+                <div class="enc-on-round-empty"></div>
                 <?php endif; ?>
                 <!-- Token Info -->
                 <div class="enc-info-token flex-grow-1 overflow-auto">
@@ -88,7 +90,8 @@ use App\Models\Encounter;
                     <?php endforeach; ?>
                 </div>
                 <!-- End Round -->
-                <form method="post" action="<?= $link->url('encounters.endRound') ?>" class="d-flex justify-content-center w-100 mt-auto">
+                <form method="post" action="<?= $link->url('encounters.endRound') ?>"
+                      class="d-flex justify-content-center w-100 mt-auto">
                     <input type="hidden" name="id" value="<?= $encounter->getId() ?>">
                     <button type="submit" class="enc-info-end-round-btn ms-2">
                         End Round
