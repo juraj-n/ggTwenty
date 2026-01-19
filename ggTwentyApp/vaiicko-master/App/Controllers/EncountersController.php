@@ -153,16 +153,24 @@ class EncountersController extends BaseController
     }
     public function deleteToken(Request $request) : Response
     {
-        try {
-            $id = (int)$request->value('id');
-            $token = Token::getOne($id);
+        $id = (int)$request->value('id');
+        $token = Token::getOne($id);
+        if (is_null($token))
+            throw new HttpException(404);
 
-            if (is_null($token)) {
-                throw new HttpException(404);
-            }
-
+        try
+        {
             $token->delete();
 
+            $encounter = Encounter::getOne((int)$request->value('encounter_id'));
+            $tokens = Token::getAll('enc_id = ?', [(int)$request->value('encounter_id')]);
+            if (count($tokens) == 0)
+                $nextCurrent = 0;
+            else
+                $nextCurrent = $encounter->getCurrent() % count($tokens);
+
+            $encounter->setCurrent($nextCurrent);
+            $encounter->save();
         } catch (\Exception $e) {
             throw new HttpException(500, 'DB Error: ' . $e->getMessage());
         }

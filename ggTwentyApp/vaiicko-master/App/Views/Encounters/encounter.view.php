@@ -78,6 +78,7 @@ use App\Models\Encounter;
                             </span>
                             <!-- Delete Token -->
                             <form method="post" action="<?= $link->url('encounters.deleteToken') ?>">
+                                <input type="hidden" name="encounter_id" value="<?= $encounter->getId() ?>">
                                 <input type="hidden" name="id" value="<?= $token->getId() ?>">
                                 <button type="submit" class="enc-info-token-del-btn ms-2">
                                     X
