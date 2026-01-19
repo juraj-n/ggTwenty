@@ -14,8 +14,8 @@ $view->setLayout('root');
 <script src="<?= $link->asset('js/changeAddedImage.js') ?>" defer></script> <!-- defer loads script after html -->
 <script src="<?= $link->asset('js/editChar.js') ?>" defer></script> <!-- defer loads script after html -->
 
-<div class="char-card">
-    <h2 class="char-form-heading text-center">
+<div class="ent-form-card">
+    <h2 class="ent-form-heading text-center">
         CHARACTER SHEET
     </h2>
 
@@ -27,11 +27,11 @@ $view->setLayout('root');
             <div class="col-sm-6 mb-4 mb-sm-0">
                 <label class="d-block text-white text-center mb-2">Character Image</label>
 
-                <div class="edit-show-image mb-3" id="image-area">
+                <div class="ent-from-img-area mb-3" id="image-area">
                     <img src="<?= $char->getImageUrl() ?>" id="image-preview" alt="Character Image Preview">
                 </div>
 
-                <input name="character-img" type="file" id="image-upload" class="form-control image-file-input" accept="image/*">
+                <input name="character-img" type="file" id="image-upload" class="form-control" accept="image/*">
             </div>
             <!-- Character Info -->
             <div class="col-sm-6">
@@ -65,7 +65,7 @@ $view->setLayout('root');
 <div class="d-flex justify-content-center">
     <form method="post" action="<?= $link->url('delete') ?>" onsubmit="return confirm('Are you sure?');">
         <input type="hidden" name="id" value="<?= $char->getId() ?>">
-        <button type="submit" class="delete-char-btn">
+        <button type="submit" class="home-char-del-btn">
             DELETE CHARACTER
         </button>
     </form>

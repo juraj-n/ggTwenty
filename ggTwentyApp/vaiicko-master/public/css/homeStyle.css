@@ -1,0 +1,51 @@
+/* Index */
+.home-ind-char-card {
+    background-color: #00161d;
+    max-width: 380px;
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px;
+    margin: 0 auto;
+    transition: transform 0.2s ease;
+}
+.home-ind-char-card:hover {
+    transform: translateY(-5px);        /* Posunie vyssie */
+}
+.home-ind-char-name {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-bottom: 2px solid #ccc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    padding: 0 2px 5px 2px;
+    margin-bottom: 10px;
+}
+.home-ind-char-img {
+    height: 250px;
+    width: 100%;
+}
+.home-ind-char-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+/* Character */
+.home-char-del-btn {
+    background-color: #780606;
+    color: white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 10px 30px;
+    margin-top: 20px;
+}
+.home-char-del-btn:hover,
+.home-char-del-btn:active {
+    background-color: #600707;
+    color: white;
+}

@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('mainGrid');
     let selectedToken = null;
     // OnCLick Select
-    grid.querySelectorAll('.token-on-grid').forEach(token => {
+    grid.querySelectorAll('.enc-map-token').forEach(token => {
         token.addEventListener('click', (e) => {
             e.stopPropagation(); // Prevent grid click from triggering
             if (selectedToken) {

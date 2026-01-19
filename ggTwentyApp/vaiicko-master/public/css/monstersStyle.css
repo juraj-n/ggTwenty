@@ -1,35 +1,43 @@
-.monster-card {
+/* Index */
+.monst-ind-card {
     background-color: #00161d;
+    border: none;
     border-radius: 10px;
     text-align: center;
-    padding: 10px;
     height: 100%;                       /* 100% predka */
     overflow: hidden;                   /* Odreze pretekajuci kontent */
     max-width: 380px;
-    margin: 0 auto;                     /* Centruje horizontalne */
+    padding: 10px;
+    margin: 0 auto;
 }
-.monster-info {
+.monst-ind-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.monst-ind-info {
+    color: white;
     font-size: 1.2rem;
-    font-weight: 600;
-    color: #ccc;
+    font-weight: 700;
 }
-.monster-name-text {
+.monst-ind-name {
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: clip;
 }
-.delete-monst-btn {
+.monst-ind-del-btn {
     background-color: #780606;
     color: white;
-    margin-top: 3px;
     border-radius: 0.5rem;
     text-decoration: none;
     font-weight: 600;
     border: none;
     cursor: pointer;
+    margin-top: 3px;
 }
-.delete-monst-btn:hover,
-.delete-monst-btn:active {
+.monst-ind-del-btn:hover,
+.monst-ind-del-btn:active {
     background-color: #600707;
     color: white;
 }

@@ -8,8 +8,8 @@
 
 <script src="<?= $link->asset('js/changeAddedImage.js') ?>" defer></script> <!-- defer loads script after html -->
 
-<div class="char-card">
-    <h2 class="char-form-heading text-center">
+<div class="ent-form-card">
+    <h2 class="ent-form-heading text-center">
         CREATE NEW CHARACTER
     </h2>
 
@@ -20,23 +20,20 @@
             <div class="col-sm-6 mb-4 mb-sm-0">
                 <label class="d-block text-white text-center mb-2">Character Image</label>
 
-                <div class="show-image-area mb-3" id="image-area">
+                <div class="ent-from-img-area mb-3" id="image-area">
                     <img src="" id="image-preview" alt="Character Image Preview">
 
                     <div class="image-placeholder-content" id="placeholder-text">
                     </div>
                 </div>
 
-                <input name="character-img" type="file" id="image-upload" class="form-control image-file-input" accept="image/*">
+                <input name="character-img" type="file" id="image-upload" class="form-control" accept="image/*">
             </div>
             <!-- Character Info -->
             <div class="col-sm-6">
                 <!-- Name -->
                 <label for="character-name" class="d-block text-white text-center mb-2">Character Name</label>
-                <input name="character-name" type="text" id="character-name" class="form-control custom-input mb-3" placeholder="Enter Character Name" required>
-
-                <hr class="section-separator mb-3">
-
+                <input name="character-name" type="text" id="character-name" class="form-control custom-input mb-3" placeholder="Enter Character Name" required maxlength="29">
                 <!-- HP / AC -->
                 <div class="row g-3 mt-4">
                     <div class="col-6">
@@ -52,7 +49,9 @@
         </div>
         <!-- Save Button -->
         <div class="d-flex justify-content-center">
-            <button type="submit" name="submit" class="btn add-save-btn">Save New Character</button>
+            <button type="submit" name="submit" class="btn add-form-save-btn">
+                Save New Character
+            </button>
         </div>
     </form>
 

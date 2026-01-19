@@ -47,3 +47,59 @@
     outline: none;
     line-height: 0;
 }
+/* Home/Monsters */
+.add-ent-btn {
+    background-color: #007274;
+    color: #ffffff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+.add-ent-btn:hover,
+.add-ent-btn:active {
+    background-color: #005455;
+}
+.ent-form-card {
+    background-color: #00161d;
+    border-radius: 1.5rem;
+    width: 100%;
+    max-width: 600px;
+    padding: 30px;
+    margin: 0 auto;
+}
+.ent-form-heading {
+    color: white;
+    font-weight: 700;
+    border-bottom: 2px solid white;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+.ent-from-img-area {
+    width: 100%;
+    height: 165px;
+    border: 2px dotted #002d3c;
+    border-radius: 5px;
+    background-color: #212529;
+}
+.ent-from-img-area #image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.add-form-save-btn {
+    background-color: #007274;
+    font-weight: 600;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 10px 30px;
+    margin-top: 20px;
+}
+.add-form-save-btn:hover,
+.add-form-save-btn:active {
+    background-color: #005455;
+    color: white;
+}

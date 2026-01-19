@@ -32,14 +32,14 @@ function updateGrid(tokens) {
     if (!grid) return;
 
     // Remove old tokens
-    grid.querySelectorAll('.token-on-grid').forEach(t => t.remove());
+    grid.querySelectorAll('.enc-map-token').forEach(t => t.remove());
 
     // Add current tokens
     tokens.forEach(token => {
         const img = document.createElement('img');
         img.src = token.img;
         img.alt = token.name;
-        img.className = 'token-on-grid';
+        img.className = 'enc-map-token';
         img.dataset.tokenId = token.id;
 
         img.style.top = `${6.7 + token.y * (100 / 8.5)}%`;
@@ -52,30 +52,30 @@ function updateGrid(tokens) {
 function updateCurrentToken(tokens, currentIndex) {
     if (!tokens.length) return;
 
-    const card = document.querySelector('.on-round-card');
+    const card = document.querySelector('.enc-on-round-token');
     if (!card) return;
 
     const token = tokens[currentIndex];
     if (!token) return;
 
-    const imgElem = card.querySelector('.on-round-img');
-    const nameElem = card.querySelector('.on-round-name');
+    const imgElem = card.querySelector('.enc-on-round-img');
+    const nameElem = card.querySelector('.enc-on-round-name');
 
     if (imgElem) imgElem.src = token.img;
     if (nameElem) nameElem.textContent = `(#${token.id}) ${token.name}`;
 }
 
 function updateTokenList(tokens) {
-    const list = document.querySelector('.tokens');
+    const list = document.querySelector('.enc-info-token');
     if (!list) return;
 
     list.innerHTML = '';
 
     tokens.forEach(token => {
         list.insertAdjacentHTML('beforeend', `
-            <div class="token-card d-flex align-items-center mb-2">
-                <img src="${token.img}" class="token-img">
-                <span class="token-name flex-grow-1 ms-2">
+            <div class="enc-info-token-card d-flex align-items-center mb-2">
+                <img src="${token.img}" class="enc-info-token-img">
+                <span class="flex-grow-1 ms-2">
                     (#${token.id}) ${token.name}
                 </span>
             </div>

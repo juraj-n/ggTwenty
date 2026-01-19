@@ -8,17 +8,17 @@
 $view->setLayout('root');
 ?>
 
-<div class="enc-options d-flex flex-column align-items-center p-4 mx-auto">
+<div class="enc-ind-options d-flex flex-column align-items-center p-4 mx-auto">
     <!-- Join Form -->
     <form  method="post" action="<?= $link->url('spectate') ?>"
-           class="d-flex w-100 mb-2 form-wrapper" id="joinForm">
-        <input type="text" name="code" id="encounterCodeInput" class="join-enc-inp" placeholder="Code" required>
-        <button type="submit" class="join-enc-btn">
+           class="enc-ind-form-join d-flex mb-2" id="joinForm">
+        <input type="text" name="code" id="encounterCodeInput" class="enc-ind-join-inp flex-fill p-2" placeholder="Code" required>
+        <button type="submit" class="enc-ind-join-btn flex-fill p-2">
             Join
         </button>
     </form>
     <!-- Create Button -->
-    <a href="<?= $link->url('encounter') ?>" class="create-enc-btn">
+    <a href="<?= $link->url('encounter') ?>" class="enc-ind-dm-btn">
         Become DM
     </a>
 </div>

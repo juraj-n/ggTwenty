@@ -4,30 +4,28 @@
 /** @var \Framework\Support\View $view */
 /** @var array $characters */
 
-use App\Configuration;
-
 $view->setLayout('root');
 ?>
 
-<script src="<?= $link->asset('js/characterNameFontSize.js') ?>"></script>
 
-<div class="add-char">
-    <a href="<?= $link->url('add') ?>" class="add-char-btn">
+
+<div class="d-flex justify-content-center mb-3">
+    <a href="<?= $link->url('add') ?>" class="add-ent-btn">
         Add New Character
     </a>
 </div>
 
-<div class="container my-4 character-card-grid">
+<div class="container-xl my-4">
     <div class="row g-4 justify-content-center">
         <?php foreach ($characters as $character): ?>
             <div class="col-12 col-md-6 col-lg-4">
                 <a href="<?= $link->url('character', ['id' => $character->getId()]) ?>" class="text-decoration-none text-dark">
-                    <div class="character-card">
-                        <div class="character-name">
+                    <div class="home-ind-char-card">
+                        <div class="home-ind-char-name">
                             <?= $character->getName() ?>
                         </div>
 
-                        <div class="character-image">
+                        <div class="home-ind-char-img d-flex justify-content-center align-items-center">
                             <img
                                     src="<?= $link->asset($character->getImageUrl()) ?>"
                                     alt="Image of <?= $character->getName() ?>"
