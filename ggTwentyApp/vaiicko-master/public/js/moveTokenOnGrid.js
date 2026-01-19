@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('mainGrid');
     let selectedToken = null;
+    grid.querySelectorAll('.enc-map-token').forEach(token => {
+        const x = parseFloat(token.dataset.x);
+        const y = parseFloat(token.dataset.y);
+        if (!isNaN(x) && !isNaN(y)) {
+            token.style.left = `${6.7 + x * (100 / 8.5)}%`;
+            token.style.top  = `${6.7 + y * (100 / 8.5)}%`;
+        }
+    });
     // OnCLick Select
     grid.querySelectorAll('.enc-map-token').forEach(token => {
         token.addEventListener('click', (e) => {

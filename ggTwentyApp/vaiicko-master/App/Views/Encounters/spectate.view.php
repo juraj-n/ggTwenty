@@ -21,10 +21,8 @@ use App\Models\Encounter;
                                 src="<?= $token->getImageUrl() ?>" alt="<?= $token->getName() ?>"
                                 class="enc-map-token"
                                 data-token-id="<?= $token->getId() ?>"
-                                style="
-                                        top: <?= 6.7 + $token->getY() * (100 / 8.5) ?>%;
-                                        left: <?= 6.7 + $token->getX() * (100 / 8.5) ?>%;
-                                        "
+                                data-x="<?= $token->getX() ?>"
+                                data-y="<?= $token->getY() ?>"
                         >
                     <?php endforeach; ?>
                 </div>
