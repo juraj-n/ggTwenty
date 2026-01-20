@@ -27,3 +27,4 @@ while ($showDetail && $exception->getPrevious() != null) { ?>
     <pre>Stack trace:<br><?= $exception->getPrevious()->getTraceAsString() ?></pre>
     <?php $exception = $exception->getPrevious(); ?>
 <?php } ?>
+

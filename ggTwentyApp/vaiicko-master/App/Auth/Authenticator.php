@@ -17,7 +17,6 @@ class Authenticator implements IAuthenticator
         $this->app = $app;
         $this->session = $this->app->getSession();
     }
-
     public function login($username, $password): bool
     {
         $users = User::getAll("username = ?", [$username]);
@@ -25,35 +24,32 @@ class Authenticator implements IAuthenticator
             return false;
 
         $user = $users[0];
-        if (!password_verify($password, $user->getPassword())) {
+        if (!password_verify($password, $user->getPassword()))
             return false;
-        }
+
         $this->user = $user;
         $this->session->set('user', $this->user);
 
         return true;
     }
-
     public function logout(): void
     {
         $this->user = null;
         $this->session->destroy();
     }
-
     public function isLogged(): bool
     {
         return $this->getUser() instanceof IIdentity;
     }
-
     public function getUser(): ?IIdentity
     {
-        if ($this->user instanceof IIdentity) {
+        if ($this->user instanceof IIdentity)
             return $this->user;
-        }
 
         $sessionValue = $this->session->get('user');
 
-        if ($sessionValue instanceof User || $sessionValue instanceof IIdentity) {
+        if ($sessionValue instanceof User || $sessionValue instanceof IIdentity)
+        {
             $this->user = $sessionValue;
             return $this->user;
         }
@@ -63,9 +59,9 @@ class Authenticator implements IAuthenticator
 
     public function __get(string $name): mixed
     {
-        if ($name === 'user') {
+        if ($name === 'user')
             return $this->getUser();
-        }
+
         return null;
     }
 }

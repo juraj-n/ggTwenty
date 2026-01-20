@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Configuration;
 use Framework\Core\Model;
 
 class Monster extends Model
@@ -42,27 +41,22 @@ class Monster extends Model
     {
         $this->id = $id;
     }
-
     public function setUserId(?int $user_id): void
     {
         $this->user_id = $user_id;
     }
-
     public function setName(string $name): void
     {
         $this->name = $name;
     }
-
     public function setHp(int $hp): void
     {
         $this->hp = $hp;
     }
-
     public function setCurrentHp(int $current_hp): void
     {
         $this->current_hp = $current_hp;
     }
-
     public function setImageUrl(?string $image_url): void
     {
         $this->image_url = $image_url;
