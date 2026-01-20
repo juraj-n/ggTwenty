@@ -3,38 +3,35 @@ const POLL_INTERVAL = 2000;
 async function fetchSpectateData() {
     try {
         const response = await fetch(`/?c=encounters&a=spectateData&enc_id=${ENC_ID}`);
-        if (!response.ok) return;
+        if (!response.ok)
+            return;
 
         const data = await response.json();
 
-        // Make sure we have tokens and current
-        if (!data.tokens || !Array.isArray(data.tokens) || typeof data.current !== 'number') return;
+        if (!data.tokens || !Array.isArray(data.tokens) || typeof data.current !== 'number')
+            return;
 
         updateGrid(data.tokens);
         updateCurrentToken(data.tokens, data.current);
         updateTokenList(data.tokens);
-
     } catch (e) {
         console.error('Polling failed', e);
     }
 }
 
-// Initial fetch immediately
-fetchSpectateData();
-
-// Then poll repeatedly
+// Initial fetch
+void fetchSpectateData();
+// Polling
 setInterval(fetchSpectateData, POLL_INTERVAL);
-
-// --- DOM Update Functions ---
 
 function updateGrid(tokens) {
     const grid = document.getElementById('mainGrid');
-    if (!grid) return;
+    if (!grid)
+        return;
 
-    // Remove old tokens
+    // Remove old
     grid.querySelectorAll('.enc-map-token').forEach(t => t.remove());
-
-    // Add current tokens
+    // Add new
     tokens.forEach(token => {
         const img = document.createElement('img');
         img.src = token.img;
@@ -48,26 +45,28 @@ function updateGrid(tokens) {
         grid.appendChild(img);
     });
 }
-
 function updateCurrentToken(tokens, currentIndex) {
-    if (!tokens.length) return;
-
+    if (!tokens.length)
+        return;
     const card = document.querySelector('.enc-on-round-token');
-    if (!card) return;
-
+    if (!card)
+        return;
     const token = tokens[currentIndex];
-    if (!token) return;
+    if (!token)
+        return;
 
     const imgElem = card.querySelector('.enc-on-round-img');
     const nameElem = card.querySelector('.enc-on-round-name');
 
-    if (imgElem) imgElem.src = token.img;
-    if (nameElem) nameElem.textContent = `(#${token.id}) ${token.name}`;
+    if (imgElem)
+        imgElem.src = token.img;
+    if (nameElem)
+        nameElem.textContent = `(#${token.id}) ${token.name}`;
 }
-
 function updateTokenList(tokens) {
     const list = document.querySelector('.enc-info-token');
-    if (!list) return;
+    if (!list)
+        return;
 
     list.innerHTML = '';
 

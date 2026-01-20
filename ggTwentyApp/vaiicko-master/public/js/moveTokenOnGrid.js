@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('mainGrid');
     let selectedToken = null;
+    // Initial Positioning
     grid.querySelectorAll('.enc-map-token').forEach(token => {
         const x = parseFloat(token.dataset.x);
         const y = parseFloat(token.dataset.y);
@@ -37,31 +38,27 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedToken.style.left = `${6.7 + x * (100 / 8.5)}%`;
         selectedToken.style.top  = `${6.7 + y * (100 / 8.5)}%`;
 
-        const tokenId = selectedToken.dataset.tokenId;
+        void savePosition(selectedToken.dataset.tokenId, x, y); // Void to ignore promise
 
         // Unselect token
         selectedToken.style.border = 'none';
         selectedToken = null;
 
-        // TODO: AJAX
-        fetch(window.changeTokenPositionUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({
-                token_id: tokenId,
-                x: x,
-                y: y
-            })
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (!data.success) {
-                    console.error('Move failed:', data.error);
-                }
-            })
-            .catch(err => console.error('AJAX error:', err));
+
     });
 });
+
+async function savePosition(tokenId, x, y) {
+    try {
+        const response = await fetch(window.changeTokenPositionUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            body: JSON.stringify({ token_id: tokenId, x, y })
+        });
+        const data = await response.json();
+        if (!data.success)
+            console.error('Move failed:', data.error);
+    } catch (err) {
+        console.error('AJAX error:', err);
+    }
+}

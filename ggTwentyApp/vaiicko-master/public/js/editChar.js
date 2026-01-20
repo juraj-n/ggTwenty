@@ -3,12 +3,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputs = form.querySelectorAll('input[type="text"], input[type="number"], input[type="file"]');
     const messageBox = document.getElementById('message-box');
 
-    // Show feedback
     function showFeedback(message, type = 'success') {
         messageBox.textContent = message;
         messageBox.className = `mt-3 alert alert-${type}`;
         messageBox.classList.remove('d-none');
-        // Optionally hide the message after a few seconds
         setTimeout(() => {
             messageBox.classList.add('d-none');
         }, 500);
@@ -41,9 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Event listeners for "autosave"
+    // Autosave event listeners
     inputs.forEach(input => {
-        // Autosave when input field loses focus
         if (input.type !== 'file') {
             input.addEventListener('blur', function() {
                 saveCharacterData(this);
@@ -51,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle Image Upload separately (it requires user interaction)
     const imageUpload = document.getElementById('image-upload');
     imageUpload.addEventListener('change', function() {
         saveCharacterData(this);

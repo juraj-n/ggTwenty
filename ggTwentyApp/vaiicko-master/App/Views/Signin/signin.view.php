@@ -7,8 +7,6 @@
 $view->setLayout('auth');
 ?>
 
-<script src="<?= $link->asset('js/validateSigninPassword.js') ?>" defer></script>
-
 <!-- Log In Button -->
 <a href="<?= $link->url('login.index') ?>" class="top-btn">Log In</a>
 
